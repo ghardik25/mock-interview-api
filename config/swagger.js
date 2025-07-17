@@ -1,4 +1,5 @@
 const swaggerJSDoc = require('swagger-jsdoc');
+const path = require('path');
 
 const options = {
   definition: {
@@ -6,10 +7,10 @@ const options = {
     info: {
       title: 'Interview Start',
       version: '1.0.0',
-      //description: 'Starts a interview session with a uniques session id',
+      description: 'Starts an interview session with a unique session ID',
     },
   },
-  apis: ['../routes/routes.js'], // Path to the API routes
+  apis: [path.join(__dirname, '../routes/routes.js')],
 };
 const swaggerSpec = swaggerJSDoc(options);
 module.exports = swaggerSpec;
