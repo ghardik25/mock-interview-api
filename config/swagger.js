@@ -5,9 +5,9 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Interview Start',
+      title: 'Mock Interview API',
       version: '1.0.0',
-      description: 'Starts an interview session with a unique session ID',
+      description: 'API documentation for AI-based mock interview system',
     },
   },
   apis: [path.join(__dirname, '../routes/routes.js')],
