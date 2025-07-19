@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "7a3eabd7-8c56-491e-a5b6-aefdc9543068",
+		"name": "Mock Interview API",
+		"description": "Collection for testing AI-based mock interview backend.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37038670"
+	},
+	"item": [
+		{
+			"name": "Start Interview",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\":\"Example Name4\",\r\n  \"role\": \"Backend Developer\",\r\n  \"experience\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/interview/start",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"interview",
+						"start"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit Answer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"session_id\": \"ut3bdr\",\r\n  \"question_id\": 75,\r\n  \"answer\": \"In my current and previous roles....\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/interview/answer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"interview",
+						"answer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Evaluate Session",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/interview/evaluate/ut3bdr",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"interview",
+						"evaluate",
+						"ut3bdr"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
