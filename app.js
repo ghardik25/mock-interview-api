@@ -11,5 +11,5 @@ app.use(express.json());
 app.use('/interview', interviewRoutes);
 
 app.listen(3000, () => {
-  console.log('Server running on port 3000');
+  console.log('Server running on port 3000 \nSwagger UI is available at: http://localhost:3000/api-docs');
 });
