@@ -3,6 +3,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 
 const app = express();
+require('dotenv').config();
 const interviewRoutes = require('./routes/routes');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

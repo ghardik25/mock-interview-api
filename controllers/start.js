@@ -1,13 +1,6 @@
 const pool = require('../config/db');
 const generateToken = require('../utils/generate_token');
-
-// Mock questions generator
-const mockQuestions = (role, experience) => {
-  return [
-    `Explain REST vs GraphQL.`,
-    `How do you design scalable APIs for large systems?`
-  ];
-};
+const { generateQuestions } = require('../services/openaiService');
 
 exports.startInterview = async (req, res) => {
   const { name, role, experience } = req.body;
@@ -36,8 +29,19 @@ exports.startInterview = async (req, res) => {
     );
     const sessionId = sessionResult.rows[0].id;
 
-    //Generate questions
-    const questions = mockQuestions(role, experience);
+    // GPT Generate questions
+    let questions = [];
+    try {
+      questions = await generateQuestions(name, role, experience);
+    } catch (err) {
+      console.error('OpenAI generation failed, using fallback.', err.message || err);
+      return res.status(500).json({
+        message: 'Failed to generate interview questions. Please try again later.',
+        error: err.message || 'OpenAI API error'
+      });
+    }
+
+    // Insert question into DB
     const questionInserts = questions.map(q =>
       client.query(
         'INSERT INTO questions (session_id, question) VALUES ($1, $2) RETURNING id, question',

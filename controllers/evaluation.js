@@ -1,4 +1,5 @@
 const pool = require('../config/db');
+const { evaluateAnswer } = require('../services/openaiService');
 
 exports.evaluateSession = async (req, res) => {
   const { session_id } = req.params;
@@ -31,10 +32,10 @@ exports.evaluateSession = async (req, res) => {
 
     const evaluations = [];
 
-    // Loop and generate fake score, feedback
+    // Loop and OpenAI call
     for (const qa of qaRes.rows) {
-      const score = Math.floor(Math.random() * 4) + 7; // Score between 7 and 10
-      const feedback = `Good answer to "${qa.question.slice(0, 20)}...". Consider adding examples.`;
+      try {
+        const { score, feedback } = await evaluateAnswer(qa.question, qa.answer);
 
       // Save evaluation in DB
       await client.query(
@@ -50,11 +51,24 @@ exports.evaluateSession = async (req, res) => {
         score,
         feedback
       });
+    } catch (err) {
+      console.error(`Failed GPT evaluation for question ${qa.question_id}:`, err);
+      evaluations.push({
+        question_id: qa.question_id,
+        question: qa.question,
+        answer: qa.answer,
+        score: null,
+        feedback: 'Evaluation failed due to AI error.'
+      });
     }
+  }
 
     // Overall score
-    const totalScore = evaluations.reduce((sum, e) => sum + e.score, 0);
-    const overall_score = parseFloat((totalScore / evaluations.length).toFixed(1));
+    const validScores = evaluations.filter(e => typeof e.score === 'number');
+    const totalScore = validScores.reduce((sum, e) => sum + e.score, 0);
+    const overall_score = validScores.length > 0
+      ? parseFloat((totalScore / validScores.length).toFixed(1))
+      : null;
 
     // Return the response
     res.status(200).json({
